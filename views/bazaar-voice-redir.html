@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Please wait...</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="canonical" href="/bazaar-voice-redir"/>
+  <meta name="bv:pageType" content="container"/>
+</head>
+<body>
+<noscript>
+  <meta http-equiv="refresh" content="0;url=/"/>
+</noscript>
+<script type="text/javascript">
+(function() {
+  var goHome = function() {
+    //window.location.href = "/";
+  };
+  var globalTimeout = setTimeout(goHome, 10E3);
+
+  var re = {
+    isMobile: /[?&]isMobile/,
+    isMobileTrue: /[?&]isMobile=true/,
+    bvEventId: '17597556d3d',
+    bvUserToken: '38e0d543024a639f9a213078503d920a646174653d3230323031313035267573657269643d363534343230303532',
+    isDomainQA: /(?:(?:major|minor)-(?:dev|qa)-www|dev|demo)\.samsclub\.com/
+  };
+
+  var href = ""+window.location.href; 
+  var isMobile = !re.isMobile.test(href) || re.isMobileTrue.test(href);
+  var domain = ""+window.location.hostname;
+  var isQA = re.isDomainQA.test(domain) || "cac-dev.staging.walmart.com" === domain;
+
+  // if (!re.bvEventId.test(href) || !re.bvUserToken.test(href)) {
+  //   clearTimeout(globalTimeout);
+  //   return setTimeout(goHome, 500);
+  // }
+
+  var bvMeta = window.document.createElement("meta");
+  bvMeta.name = "bv:userToken";
+  bvMeta.content = re.bvUserToken;
+
+  var bvScript = window.document.createElement("script");
+  bvScript.async = true;
+  bvScript.src = [
+    "https://apps.bazaarvoice.com/deployments/samsclub",
+    isMobile ? "/mobile" : "/main_site",
+    isQA ? "/staging" : "/production",
+    "/en_US/bv.js"
+  ].join("");
+
+  var headElement = window.document.getElementsByTagName("head")[0];
+  headElement.appendChild(bvMeta);
+  headElement.appendChild(bvScript);
+
+  var wait4Bv = function (globalTimeout, bvScriptAttempts, bvInternalAttempts) {
+    if (bvScriptAttempts > 50 || bvInternalAttempts > 100) {
+      return goHome();
+    }
+    if (typeof window.BV === "undefined") {
+      return setTimeout(wait4Bv, 100, globalTimeout, bvScriptAttempts+1, bvInternalAttempts);
+    }
+    if (isMobile) {
+      if (typeof window.BV._internal === "undefined") {
+        return setTimeout(wait4Bv, 10, globalTimeout, bvScriptAttempts, bvInternalAttempts+1);
+      }
+      // return false to redirect back to PDP with modal
+      //   ... instead of blank container with review - mobile only
+      Object.defineProperty(window.BV._internal, "mobile", {
+        enumerable: true,
+        get: function() {return false},
+        set: function() {}
+      });
+    }
+    // if nothing happens in 5s (after BV is here) go home
+    clearTimeout(globalTimeout);
+    setTimeout(goHome, 5150);
+  };
+  wait4Bv(globalTimeout, 0, 0);
+})();
+</script>
+</body>
+</html>

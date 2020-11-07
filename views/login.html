@@ -1,0 +1,12 @@
+<%- include('header.html') %>
+
+<form method='post' action="/login" class="card login_form">
+    <label>Username / Email</label>
+    <input class='form-control' required="required" type='text' name='email_address' id='email_address'>
+    <label>Password</label>
+    <input class='form-control' required="required" type='password' name='pass' id='pass'><br>
+
+    <button type="submit" class="btn btn-success">Sign In</button>
+</form>
+
+<%- include('footer.html') %>

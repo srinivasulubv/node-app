@@ -1,0 +1,2 @@
+* Ignore dependencies, don't add anything from these files.
+/node_modules

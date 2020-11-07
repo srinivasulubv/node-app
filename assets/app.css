@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300&display=swap');
+*{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 300;
+}
+.login_form{
+    width:400px;
+    margin:auto;
+    padding:20px;
+    margin-top:100px;
+    margin-bottom:100px;
+}
+
+footer{
+    text-align: center;
+}

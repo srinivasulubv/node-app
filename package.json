@@ -1,0 +1,15 @@
+{
+  "name": "review-stars",
+  "version": "1.0.0",
+  "description": "This is a practice project in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "N.Srinivasulu Rao",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1"
+  }
+}
